@@ -1,0 +1,9 @@
+RUN THESE FILES IN THE FOLLOWING ORDER:
+
+configure $1 where you specify the number of hadoop nodes in the cluster
+
+build-images
+
+init-containers
+
+go-to-containers
