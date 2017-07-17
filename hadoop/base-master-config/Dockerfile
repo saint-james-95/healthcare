@@ -1,4 +1,4 @@
-FROM saintjames95/hadoop:base
+FROM saintjames95/hadoop:base-master
 WORKDIR /root
 
 COPY config/* /tmp/    
@@ -22,4 +22,7 @@ RUN mkdir -p ~/hdfs/namenode && \
     chmod +x $HADOOP_HOME/sbin/start-dfs.sh && \
     chmod +x $HADOOP_HOME/sbin/start-yarn.sh
 
-CMD [ "sh", "-c", "service ssh start; bash"]
+# Setup node formating
+RUN /usr/local/hadoop/bin/hdfs namenode -format
+
+CMD [ "sh", "-c", "service ssh start; bash;"]

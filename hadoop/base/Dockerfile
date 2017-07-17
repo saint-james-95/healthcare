@@ -2,18 +2,9 @@ FROM ubuntu:14.04
 
 WORKDIR /root
 
-# install openssh-server, wget. 
-# software properties nonsense is so i can run add-apt-repository command
+# install openssh-server, wget, openjdk. 
 RUN apt-get update && \
-    apt-get install -y software-properties-common python-software-properties && \
     apt-get install -y openssh-server wget openjdk-7-jdk
-
-#install open-jdk 8
-# RUN add-apt-repository -y ppa:openjdk-r/ppa && \
-  #  apt-get update && \ 
-   # apt-get install -y openjdk-8-jdk && \
-   # update-alternatives --config java && \
-   # update-alternatives --config javac 
 
 # install hadoop 2.7.2
 RUN wget https://github.com/kiwenlau/compile-hadoop/releases/download/2.7.2/hadoop-2.7.2.tar.gz && \
@@ -24,3 +15,10 @@ RUN wget https://github.com/kiwenlau/compile-hadoop/releases/download/2.7.2/hado
 # ssh without key
 RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
     cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+ENV JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 \
+    HADOOP_HOME=/usr/local/hadoop
+
+ENV PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+
+CMD [ "sh", "-c", "service ssh start; bash"]

@@ -11,10 +11,15 @@ fi
 
 # N nodes to config setup
 i=1
-cd base-config
-rm config/slaves
+sudo rm config/slaves
 while [ $i -lt $N ]
 do
-	echo "hadoop-slave$i" >> config/slaves
+    sudo echo "hadoop-slave$i" >> config/slaves
 	((i++))
-done 
+done  
+
+sudo rm -rf base-config/config
+sudo rm -rf base-master-config/config
+
+sudo cp -r config base-config
+sudo cp -r config base-master-config
