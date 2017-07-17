@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# Usage: run1.sh <percent>
-# where:
-# - percent of NPIs to use (integer number, e.g., 10, 50, 100%)
-
