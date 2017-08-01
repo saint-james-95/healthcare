@@ -1,9 +1,9 @@
-RUN THESE FILES IN THE FOLLOWING ORDER:
+RUN THESE FILES IN THE FOLLOWING ORDER
 
-configure $1 where you specify the number of hadoop nodes in the cluster
+./configure.sh [# OF SLAVES] [CLUSTER NUMBER]
 
-build-images
+./build-images.sh
 
-init-containers
+./init-containers.sh [CLUSTER NUMBER]
 
-go-to-containers
+./to-master [CLUSTER NUMBER]
