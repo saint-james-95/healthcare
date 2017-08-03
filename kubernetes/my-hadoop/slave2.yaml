@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hadoop-slave2
+  labels:
+    app: run1
+spec:
+  subdomain: hadoop
+  hostname: hadoop1-slave2
+  subdomain: hadoop
+  containers:
+  - name: hadoop-slave2
+    image: saintjames95/hadoop:slave
+    command: ["/bin/sh"]
+    args: ["-c", "service ssh start && sleep infinity"]
