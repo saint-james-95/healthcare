@@ -10,5 +10,5 @@ ENTRYPOINT ["/bin/sh"]
 CMD [$3]
 EOF
 
-mv Dockerfile $2
+mv -f Dockerfile $2
 sudo docker build -t $4 $2 

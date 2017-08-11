@@ -26,7 +26,7 @@ MAPPING = NPIDATA[['npi', 'specialty', 'num_sp', 'entity_type']]
 # Add classification and specialization codes to providers in CMS medicare-B dataset
 # DATASET = pd.read_csv('ref_data/Medicare-Physician-and-Other-Supplier-PUF-CY2012.txt', sep='\t', header=0, skiprows=[1], dtype=str, usecols=['npi', 'provider_type', 'hcpcs_code', 'hcpcs_description', 'bene_day_srvc_cnt'])
 
-DATASET = pd.read_csv('ref_data/Medicare_Provider_Util_Payment_PUF_CY2013.txt', sep='\t', header=0, skiprows=[1], dtype=str, usecols=['NPI', 'PROVIDER_TYPE', 'HCPCS_CODE', 'HCPCS_DESCRIPTION', 'BENE_DAY_SRVC_CNT'])
+DATASET = pd.read_csv('ref_data/Medicare_Provider_Util_Payment_PUF_CY2012.txt', sep='\t', header=0, skiprows=[1], dtype=str, usecols=['NPI', 'PROVIDER_TYPE', 'HCPCS_CODE', 'HCPCS_DESCRIPTION', 'BENE_DAY_SRVC_CNT'])
 
 DATASET.columns = map(str.lower, DATASET.columns)
 

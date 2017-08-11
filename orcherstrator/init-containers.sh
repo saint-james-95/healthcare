@@ -27,16 +27,6 @@ sudo docker network create --driver=bridge ${CLUSTER}
 # Number of Slaves
 N=$2
 
-# Master
-sudo docker run -itd \
-                --net=${CLUSTER} \
-                -p 5007${1}:50070 \
-                -p 808${1}:8088 \
-                --name ${CLUSTER}-master \
-                --hostname ${CLUSTER}-master \
-                -v /home/sheehan/docker-volumes:/big/medicare-demo/ref_data/ \
-		--entrypoint "/bin/bash" \
-		$3
 # Slaves
 i=1
 while [ $i -le $N ]
@@ -49,3 +39,12 @@ do
 	i=$(( $i + 1 ))
 done 
 
+# Master
+sudo docker run -it \
+                --net=${CLUSTER} \
+                -p 5007${1}:50070 \
+                -p 808${1}:8088 \
+                --name ${CLUSTER}-master \
+                --hostname ${CLUSTER}-master \
+                -v ${4}:${5} \
+		$3
