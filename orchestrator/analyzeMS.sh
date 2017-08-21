@@ -13,6 +13,14 @@ if [ -z "$2" ]
     exit 1
 fi
 
+cd hadoop/scripts
+./configure.sh $1 $2
+./build-images.sh
+cd ../..
+cd ~/Use-Case-Healthcare/apps/analyzeApp
+sudo docker build -t app:analyze .
+cd ~/Use-Case-Healthcare/orchestrator
+
 CLUSTER=hadoop${1}
 
 # Stop current instance of this cluster if exists
@@ -24,18 +32,6 @@ sudo docker rm $(sudo docker ps -a -f "name=${CLUSTER}" | tail -n +2 | awk '{pri
 echo "restarting ${CLUSTER} network"
 sudo docker network rm ${CLUSTER} &> /dev/null
 sudo docker network create --driver=bridge ${CLUSTER}
-
-# start hadoop master container
-echo "start hadoop-master container..."
-eval  sudo docker run -itd \
-                --net=${CLUSTER} \
-                -p 5007${1}:50070 \
-                -p 808${1}:8088 \
-                --name ${CLUSTER}-master \
-                --hostname ${CLUSTER}-master \
-		-e "PCT=$3" \
-		-v ${4}:/big/medicare-demo/ref_data/ \
-                app:postprocess $5
 
 # start hadoop slave container
 i=1
@@ -49,3 +45,16 @@ do
                         environment:slave 
         i=$(( $i + 1 ))
 done
+
+# start hadoop master container
+echo "start hadoop-master container..."
+eval  sudo docker run -it \
+                --net=${CLUSTER} \
+                -p 5007${1}:50070 \
+                -p 808${1}:8088 \
+                --name ${CLUSTER}-master \
+                --hostname ${CLUSTER}-master \
+		-e \"PCT=$3\" \
+		-v ${4}:/big/medicare-demo/ref_data/ \
+		-v ${5}:/big/medicare-demo/output.txt \
+                app:analyze $6

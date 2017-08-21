@@ -1,6 +1,5 @@
 #!/bin/bash
 # USAGE: Cluster Number -- Number of Slaves -- Run Percentage -- Input Data Volume
-
 if [ -z "$1" ]
   then
     echo "No Cluster Number Supplied"
@@ -12,6 +11,14 @@ if [ -z "$2" ]
     echo "Number of Slaves not Supplied"
     exit 1
 fi
+
+cd hadoop/scripts
+./configure.sh $1 $2
+./build-images.sh
+cd ../..
+cd ~/Use-Case-Healthcare/apps/preprocessApp
+sudo docker build -t app:preprocess .
+cd ~/Use-Case-Healthcare/orchestrator
 
 CLUSTER=hadoop${1}
 
@@ -25,18 +32,6 @@ echo "restarting ${CLUSTER} network"
 sudo docker network rm ${CLUSTER} &> /dev/null
 sudo docker network create --driver=bridge ${CLUSTER}
 
-# start hadoop master container
-echo "start hadoop-master container..."
-sudo docker run -itd \
-                --net=${CLUSTER} \
-                -p 5007${1}:50070 \
-                -p 808${1}:8088 \
-                --name ${CLUSTER}-master \
-                --hostname ${CLUSTER}-master \
-		-e "PCT=${3}" \
-		-v ${4}:/big/medicare-demo/ref_data \
-                app:preprocess 
-
 # start hadoop slave container
 i=1
 while [ $i -le $2 ]
@@ -47,5 +42,17 @@ do
                         --name ${CLUSTER}-slave$i \
                         --hostname ${CLUSTER}-slave$i \
                         environment:slave 
-        i=$(( $i + 1 ))
+       i=$(( $i + 1 ))
 done
+
+# start hadoop master container
+echo "start hadoop-master container..."
+sudo docker run -it \
+                --net=${CLUSTER} \
+                -p 5007${1}:50070 \
+                -p 808${1}:8088 \
+		--name ${CLUSTER}-master \
+                --hostname ${CLUSTER}-master \
+		-e "PCT=${3}" \
+		-v ${4}:/big/medicare-demo/ref_data \
+                app:preprocess 

@@ -1,15 +1,14 @@
-DATA_DIR="~/Use-Case-Healthcare/data"
-RESULTS_DIR="~/Use-Case-Healthcare/results"
+DATA_DIR="${HOME}/Use-Case-Healthcare/data"
+RESULTS_FILE="${HOME}/Use-Case-Healthcare/output/results.txt"
 PCT=1
 
-./collectMS.sh $DATA_DIR
-#KILL
-./preprocessMS.sh 1 2 $PCT $DATA_DIR
-sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get /user/root"
-#KILL
+# Microservice 1
+# ./collectMS.sh $DATA_DIR
 
-CMD=$(sudo docker inspect -f '{{.Config.Cmd}}' app:postprocess | tr "[" \" | tr "]" \" | sed 's/\"-c /\"-c\" \"/g')
-CMD=${CMD/.\/start-hadoop.sh/.\/start-hadoop.sh && cd \/big\/medicare-demo\/ref_data && hadoop fs -put medicare_\$PCT}
+# Microservice 2
+# ./preprocessMS.sh 1 2 $PCT $DATA_DIR 
+# sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
 
-./analyzeMS.sh 2 2 $PCT $DATA_DIR $CMD 
-#KILL
+# Microservice 3
+ANALYZE_CMD="\"-c\" \"service ssh start && ./start-hadoop.sh && cd /big/medicare-demo/ref_data && hadoop fs -put medicare_\\\$PCT && cd /big/medicare-demo && run2.sh \\\$PCT \>\> /big/medicare-demo/output.txt; bash\""
+./analyzeMS.sh 2 10 $PCT $DATA_DIR $RESULTS_FILE "$ANALYZE_CMD" 
