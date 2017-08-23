@@ -24,4 +24,4 @@ hadoop fs -put "data/$raw_data_file" "$hdfs_folder/raw_data"
 # Run pre-process to compute similarity and generate graph structure using PIG
 pig -param folder=$hdfs_folder code/gen-graph.pig
 
-mr-jobhistory-daemon.sh stop historyserver
+mr-jobhistory-daemon.sh stop historyserver                                                                                                                                                             

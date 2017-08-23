@@ -5,12 +5,14 @@ import os
 import fnmatch
 
 # Read npidata file
+medicarefile = fnmatch.filter(os.listdir('ref_data'), 'Medicare*.txt')[0]
+nuccfile = fnmatch.filter(os.listdir('ref_data'), 'nucc*.csv')[0]
 npifile = fnmatch.filter(os.listdir('ref_data'), 'npidata*[!FileHeader].csv')[0]
 NPIDATA = pd.read_csv('ref_data/' + npifile, sep=',', quotechar='"', quoting=1, header=0, dtype=str, usecols = ['NPI','Entity Type Code', 'Healthcare Provider Taxonomy Code_1', 'Healthcare Provider Taxonomy Code_2', 'Healthcare Provider Taxonomy Code_3'])
 NPIDATA.columns = ['npi', 'entity_type', 'sp1_code', 'sp2_code', 'sp3_code']
 
 # Read NUCC provider taxonomy codes
-TAXONOMY = pd.read_csv('ref_data/nucc_taxonomy_150.csv', sep=',', header=0, usecols = ['Code', 'Classification'])
+TAXONOMY = pd.read_csv('ref_data/' + nuccfile, sep=',', header=0, usecols = ['Code', 'Classification'])
 TAXONOMY.columns = ['sp_code', 'specialty']
 tax_map = dict(zip(TAXONOMY.sp_code, TAXONOMY.specialty))
 
@@ -24,13 +26,8 @@ NPIDATA['num_sp'] = NPIDATA['sp_str'].map(count_specialties)
 MAPPING = NPIDATA[['npi', 'specialty', 'num_sp', 'entity_type']]
 
 # Add classification and specialization codes to providers in CMS medicare-B dataset
-# DATASET = pd.read_csv('ref_data/Medicare-Physician-and-Other-Supplier-PUF-CY2012.txt', sep='\t', header=0, skiprows=[1], dtype=str, usecols=['npi', 'provider_type', 'hcpcs_code', 'hcpcs_description', 'bene_day_srvc_cnt'])
-
-DATASET = pd.read_csv('ref_data/Medicare_Provider_Util_Payment_PUF_CY2012.txt', sep='\t', header=0, skiprows=[1], dtype=str, usecols=['NPI', 'PROVIDER_TYPE', 'HCPCS_CODE', 'HCPCS_DESCRIPTION', 'BENE_DAY_SRVC_CNT'])
-
+DATASET = pd.read_csv('ref_data/' + medicarefile, sep='\t', header=0, skiprows=[1], dtype=str, usecols=['NPI', 'PROVIDER_TYPE', 'HCPCS_CODE', 'HCPCS_DESCRIPTION', 'BENE_DAY_SRVC_CNT'])
 DATASET.columns = map(str.lower, DATASET.columns)
-
-
 JOINED = pd.merge(DATASET, MAPPING, how='left', left_on = 'npi', right_on = 'npi');
 FILTERED = JOINED[(JOINED['entity_type']=='1') & (JOINED['num_sp']==1)]		# Only use individuals (no organizations) with a single specialty
 RAW_DATA = FILTERED[['npi', 'specialty', 'hcpcs_code', 'hcpcs_description', 'bene_day_srvc_cnt']]
