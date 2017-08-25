@@ -5,6 +5,9 @@ PCT=1
 mkdir -p $RESULTS_DIR
 sudo touch $RESULTS_FILE
 
+./pull.sh
+./retag.sh
+
 # Microservice 1
 # Input - Data dir on host to put datasets
 # Output - Datasets to host directory
@@ -12,7 +15,7 @@ sudo touch $RESULTS_FILE
 # Once finished - nothing to do, remove container
 
 # Runs Interactively
-# ./collectMS.sh $DATA_DIR
+./collectMS.sh $DATA_DIR
 
 # Deletes itself when finished
 sudo docker rm collector
