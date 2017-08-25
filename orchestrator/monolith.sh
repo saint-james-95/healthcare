@@ -28,11 +28,11 @@ sudo docker rm collector
 # Once finished - orchestrator extracts output to $DATA_DIR
 
 # Runs Detached 
-#./preprocessMS.sh 1 5 $PCT $DATA_DIR
+./preprocessMS.sh 1 5 $PCT $DATA_DIR
 
 echo "waiting for preprocessing to finish. You can check the containers activities with sudo docker logs --follow hadoop1-master"
 
-#while : ; do
+while : ; do
 
         STATUS=`sudo docker exec hadoop1-master bash -c "ps -NT | tail -1"`
         STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
@@ -41,11 +41,11 @@ echo "waiting for preprocessing to finish. You can check the containers activiti
         if [[ $STATUS = "bash" ]]; then
                 break
         fi
- #       sleep 300
-#done
+        sleep 300
+done
 
 #Move files to Linux Kernel Filesystem
-#sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
+sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
 
 # Microservice 3
 # Input - Cluster Number (to have more than one cluster)
