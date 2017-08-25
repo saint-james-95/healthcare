@@ -5,9 +5,6 @@ PCT=1
 mkdir -p $RESULTS_DIR
 sudo touch $RESULTS_FILE
 
-./pull.sh
-./retag.sh
-
 # Microservice 1
 # Input - Data dir on host to put datasets
 # Output - Datasets to host directory
@@ -30,10 +27,12 @@ sudo docker rm collector
 # Before starting - volume mount $DATA_DIR to /big/medicare-demo/ref_data
 # Once finished - orchestrator extracts output to $DATA_DIR
 
-# Runs Detached (Needed to execute commands after main process)
-./preprocessMS.sh 1 5 $PCT $DATA_DIR
+# Runs Detached 
+#./preprocessMS.sh 1 5 $PCT $DATA_DIR
 
-while : ; do
+echo "waiting for preprocessing to finish. You can check the containers activities with sudo docker logs --follow hadoop1-master"
+
+#while : ; do
 
         STATUS=`sudo docker exec hadoop1-master bash -c "ps -NT | tail -1"`
         STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
@@ -42,12 +41,11 @@ while : ; do
         if [[ $STATUS = "bash" ]]; then
                 break
         fi
-        echo "waiting for preprocessing to finish. You can check the containers activities with sudo docker logs --follow hadoop1-master"
-        sleep 300
-done
+ #       sleep 300
+#done
 
 #Move files to Linux Kernel Filesystem
-sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
+#sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
 
 # Microservice 3
 # Input - Cluster Number (to have more than one cluster)
@@ -63,7 +61,20 @@ sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && had
 #                 - redirect run2 STDOUT on container to RESULTS_FILE
 # Once finished - Nothing to do
 
-# Runs Interactively
+# Runs Detached
 ANALYZE_CMD="\"-c\" \"service ssh start && ./start-hadoop.sh && cd /big/medicare-demo/ref_data && hadoop fs -put medicare_\\\$PCT && cd /big/medicare-demo && ./run2.sh \\\$PCT >> /big/medicare-demo/output.txt; bash\""
 ./analyzeMS.sh 2 10 $PCT $DATA_DIR $RESULTS_FILE "$ANALYZE_CMD"
 
+echo "waiting for analytics to finish. You can check the containers activities with sudo docker logs --follow hadoop2-master. STDOUT is redirected to $RESULTS_FILE once the cluster has been initialized. Use sudo tail -f $RESULTS_FILE to follow this output"
+
+while : ; do
+
+        STATUS=`sudo docker exec hadoop2-master bash -c "ps -NT | tail -1"`
+        STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
+
+        #Done once we return to the shell
+        if [[ $STATUS = "bash" ]]; then
+                break
+        fi
+        sleep 30
+done

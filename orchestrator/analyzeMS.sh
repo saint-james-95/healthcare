@@ -1,5 +1,5 @@
 #!/bin/bash
-# USAGE: Cluster Number -- Number of Slaves -- Run Percentage -- Input Data Volume -- Overwritten Command
+# USAGE: Cluster Number -- Number of Slaves -- Run Percentage -- Input Data Volume -- Output File -- Overwritten Command
 
 if [ -z "$1" ]
   then
@@ -47,8 +47,8 @@ eval sudo docker run -itd \
                 -p 808${1}:8088 \
                 --name ${CLUSTER}-master \
                 --hostname ${CLUSTER}-master \
-		-e \"PCT=$3\" \
-		 -v ${4}:/big/medicare-demo/ref_data/ \
-                -v ${5}:/big/medicare-demo/output.txt \
+                -e \"PCT=$3\" \
+                -v ${4}:/big/medicare-demo/ref_data/ \
+      	    -v ${5}:/big/medicare-demo/output.txt \
                 app:analyze $6
 

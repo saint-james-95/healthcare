@@ -35,7 +35,7 @@ do
                         --net=${CLUSTER} \
                         --name ${CLUSTER}-slave$i \
                         --hostname ${CLUSTER}-slave$i \
-                        environment:slave1  
+                        environment:slave1
         i=$(( $i + 1 ))
 done
 
@@ -49,5 +49,5 @@ sudo docker run -itd \
                 --hostname ${CLUSTER}-master \
                 -e "PCT=${3}" \
                 -v ${4}:/big/medicare-demo/ref_data \
-                app:preprocess
+  	    app:preprocess
 
