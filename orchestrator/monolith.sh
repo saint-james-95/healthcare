@@ -1,5 +1,5 @@
-MEDICARE_YEAR=2013
-PCT=1
+MEDICARE_YEAR=2015
+PCT=10
 DATA_DIR="${HOME}/Use-Case-Healthcare/data"
 RESULTS_DIR="${HOME}/Use-Case-Healthcare/output"
 RESULTS_FILE="${RESULTS_DIR}/results_${PCT}.txt"
@@ -68,6 +68,7 @@ echo "beginning analytics microservice..."
 ./analyzeMS.sh 2 10 $PCT $DATA_DIR $RESULTS_FILE "$ANALYZE_CMD"
 
 # Check status every minute, continue once container is waiting in bash shell
+echo "waiting for analytics to finish. You can check the containers activities with sudo docker logs --follow hadoop2-master"
 while : ; do
 
         STATUS=`sudo docker exec hadoop2-master bash -c "ps -NT | tail -1"`
