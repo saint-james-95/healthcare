@@ -1,9 +1,0 @@
-RUN THESE FILES IN THE FOLLOWING ORDER
-
-./configure.sh [# OF SLAVES] [CLUSTER NUMBER]
-
-./build-images.sh
-
-./init-containers.sh [CLUSTER NUMBER]
-
-./to-master [CLUSTER NUMBER]
