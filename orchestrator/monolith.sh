@@ -1,4 +1,4 @@
-MEDICARE_YEAR=2014
+MEDICARE_YEAR=2012
 PCT=10
 DATA_DIR="${HOME}/Use-Case-Healthcare/data"
 RESULTS_DIR="${HOME}/Use-Case-Healthcare/output"
