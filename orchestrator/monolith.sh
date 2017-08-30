@@ -1,8 +1,8 @@
-MEDICARE_YEAR=2015
+MEDICARE_YEAR=2014
 PCT=10
 DATA_DIR="${HOME}/Use-Case-Healthcare/data"
 RESULTS_DIR="${HOME}/Use-Case-Healthcare/output"
-RESULTS_FILE="${RESULTS_DIR}/results_${PCT}.txt"
+RESULTS_FILE="${RESULTS_DIR}/results_${MEDICARE_YEAR}_${PCT}.txt"
 mkdir -p $RESULTS_DIR
 sudo touch $RESULTS_FILE
 
@@ -16,6 +16,10 @@ sudo touch $RESULTS_FILE
 echo "beginning collection microservice..."
 ./collectMS.sh $DATA_DIR $MEDICARE_YEAR
 echo "collection microservice finished"
+
+# Fix file header case for dataset
+echo "Fixing Dataset File Header Case Issue..."
+sudo sed -i '1s/./\U&/g' ${DATA_DIR}/Medicare_Provider_Util_Payment_PUF_CY${MEDICARE_YEAR}.txt
 
 # Microservice 2
 # Runs Detached 
@@ -32,7 +36,7 @@ echo "beginning preprocessing microservice..."
 ./preprocessMS.sh 1 5 $PCT $DATA_DIR
 
 # Check status every 5 minutes, continue once container is waiting in bash shell
-echo "waiting for preprocessing to finish. You can check the containers activities with sudo docker logs --follow hadoop1-master"
+echo "waiting for preprocessing to finish. You can check the container's activities with sudo docker logs --follow hadoop1-master"
 while : ; do
         STATUS=`sudo docker exec hadoop1-master bash -c "ps -NT | tail -1"`
         STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
@@ -68,7 +72,7 @@ echo "beginning analytics microservice..."
 ./analyzeMS.sh 2 10 $PCT $DATA_DIR $RESULTS_FILE "$ANALYZE_CMD"
 
 # Check status every minute, continue once container is waiting in bash shell
-echo "waiting for analytics to finish. You can check the containers activities with sudo docker logs --follow hadoop2-master"
+echo "waiting for analytics to finish. You can check the container's activities with sudo docker logs --follow hadoop2-master"
 while : ; do
 
         STATUS=`sudo docker exec hadoop2-master bash -c "ps -NT | tail -1"`
