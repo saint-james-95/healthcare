@@ -74,7 +74,6 @@ echo "beginning analytics microservice..."
 # Check status every minute, continue once container is waiting in bash shell
 echo "waiting for analytics to finish. You can check the container's activities with sudo docker logs --follow hadoop2-master"
 while : ; do
-
         STATUS=`sudo docker exec hadoop2-master bash -c "ps -NT | tail -1"`
         STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
 
