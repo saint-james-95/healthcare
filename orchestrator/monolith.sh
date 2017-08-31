@@ -32,8 +32,10 @@ sudo sed -i '1s/./\U&/g' ${DATA_DIR}/Medicare_Provider_Util_Payment_PUF_CY${MEDI
 # Before starting - volume mount $DATA_DIR to /big/medicare-demo/ref_data
 # Once finished - orchestrator extracts output to $DATA_DIR
 
+PREPROCESS_CLUSTER_ID=1
+PREPROCESS_SLAVES=5
 echo "beginning preprocessing microservice..."
-./preprocessMS.sh 1 5 $PCT $DATA_DIR
+./preprocessMS.sh $PREPROCESS_CLUSTER_ID $PREPROCESS_SLAVES $PCT $DATA_DIR
 
 # Check status every 5 minutes, continue once container is waiting in bash shell
 echo "waiting for preprocessing to finish. You can check the container's activities with sudo docker logs --follow hadoop1-master"
@@ -68,8 +70,11 @@ sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && had
 # Overwrite Default Command
 ANALYZE_CMD="\"-c\" \"service ssh start && ./start-hadoop.sh && cd /big/medicare-demo/ref_data && hadoop fs -put medicare_\\\$PCT && cd /big/medicare-demo && ./run2.sh \\\$PCT >> /big/medicare-demo/output.txt; bash\""
 
+
+ANALYZE_CLUSTER_ID=2
+ANALYZE_SLAVES=10
 echo "beginning analytics microservice..."
-./analyzeMS.sh 2 10 $PCT $DATA_DIR $RESULTS_FILE "$ANALYZE_CMD"
+./analyzeMS.sh $ANALYZE_CLUSTER_ID $ANALYZE_SLAVES $PCT $DATA_DIR $RESULTS_FILE "$ANALYZE_CMD"
 
 # Check status every minute, continue once container is waiting in bash shell
 echo "waiting for analytics to finish. You can check the container's activities with sudo docker logs --follow hadoop2-master"

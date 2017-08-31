@@ -5,7 +5,7 @@ import os
 import fnmatch
 
 # Read input files
-medicarefile = fnmatch.filter(os.listdir('ref_data'), 'Medicare*.txt')[0]
+medicarefile = fnmatch.filter(os.listdir('ref_data'), 'Medicare_Provider*.txt')[0]
 nuccfile = fnmatch.filter(os.listdir('ref_data'), 'nucc*.csv')[0]
 
 # Read npidata file

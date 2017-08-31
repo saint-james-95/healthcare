@@ -2,6 +2,6 @@
 <configuration>
     <property>
         <name>fs.defaultFS</name>
- 	<value>hdfs://hadoop2-master:9000/</value>
+ 	<value>hdfs://hadoop1-master:9000/</value>
     </property>
 </configuration>
