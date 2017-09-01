@@ -1,4 +1,4 @@
-FROM environment:master2
+FROM nbdif/healthcare:env_master2
 WORKDIR /root
 COPY . /big/medicare-demo
 RUN cd /big/medicare-demo/socialite && ant 
