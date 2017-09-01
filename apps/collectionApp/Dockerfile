@@ -1,4 +1,4 @@
-FROM environment:ubuntu
+FROM nbdif/common:environment
 WORKDIR /root
 RUN mkdir output
 COPY . /root
