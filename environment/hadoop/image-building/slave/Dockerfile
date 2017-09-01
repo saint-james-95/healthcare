@@ -1,4 +1,4 @@
-FROM environment:base
+FROM nbdif/healthcare:hadoop_slave_base
 
 COPY config/* /tmp/
 
