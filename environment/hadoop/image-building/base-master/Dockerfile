@@ -1,4 +1,4 @@
-FROM environment:base
+FROM nbdif/healthcare:hadoop_base_slave
 
 WORKDIR /root
 
