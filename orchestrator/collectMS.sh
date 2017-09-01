@@ -15,8 +15,8 @@ sudo docker stop $CONTAINER_NAME &> /dev/null
 sudo docker rm $CONTAINER_NAME &> /dev/null
 
 # Choose datasets to collect
-NPI=false
-NUCC=false
+NPI=true
+NUCC=true
 MEDICARE=true
 
 # Run Microservice
@@ -26,5 +26,5 @@ sudo docker run -it \
 		-e "NUCC=$NUCC" \
 		-e "MEDICARE=$MEDICARE" \
 		-e "MEDICARE_YEAR=$MEDICARE_YEAR" \
-		-v ${DATA_DIR}:/root/output app:collect
+		-v ${DATA_DIR}:/root/output nbdif/healthcare:app_collect
 

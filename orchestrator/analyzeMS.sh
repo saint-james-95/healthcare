@@ -43,7 +43,7 @@ do
                         --net=${CLUSTER} \
                         --name ${CLUSTER}-slave$i \
                         --hostname ${CLUSTER}-slave$i \
-                        environment:slave2
+                        nbdif/healthcare:env_slave2
         i=$(( $i + 1 ))
 done
 
@@ -58,4 +58,4 @@ eval sudo docker run -itd \
                 -e \"PCT=$PCT\" \
                 -v ${DATA_DIR}:/big/medicare-demo/ref_data \
       	        -v ${OUTPUT_FILE}:/big/medicare-demo/output.txt \
-                app:analyze $CMD
+                nbdif/healthcare:app_analyze $CMD
