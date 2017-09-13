@@ -1,5 +1,7 @@
 #Usage: $1 = Cluster Identifying Number , must be 1 - 9
-#Image tags have this number as the last character in the tag name        
+#Image tags have this number as the last character in the tag name    
+
+THIS_DIR=$PWD
 
 cd $HOME/Use-Case-Healthcare/environment/hadoop/dockerfiles
 
@@ -12,3 +14,4 @@ cd ..
 cd master
 sudo docker build -t environment:master$1 .
 
+cd $THIS_DIR
