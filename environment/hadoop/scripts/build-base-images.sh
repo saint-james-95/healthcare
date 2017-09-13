@@ -1,3 +1,5 @@
+#Build the base slave and master images for all hadoop clusters. 
+
 cd $HOME/Use-Case-Healthcare/environment/hadoop/dockerfiles
 
 #Base image, shared by slave and master
