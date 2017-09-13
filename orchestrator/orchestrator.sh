@@ -4,7 +4,7 @@ DATA_DIR="${HOME}/Use-Case-Healthcare/data"
 RESULTS_DIR="${HOME}/Use-Case-Healthcare/output"
 RESULTS_FILE="${RESULTS_DIR}/results_${MEDICARE_YEAR}_${PCT}.txt"
 mkdir -p $RESULTS_DIR
-sudo touch $RESULTS_FILE
+touch $RESULTS_FILE
 
 # Microservice 1
 # Runs Interactively
@@ -19,7 +19,7 @@ echo "collection microservice finished"
 
 # Fix file header case for dataset
 echo "Fixing Dataset File Header Case Issue..."
-sudo sed -i '1s/./\U&/g' ${DATA_DIR}/Medicare_Provider_Util_Payment_PUF_CY${MEDICARE_YEAR}.txt
+sed -i '1s/./\U&/g' ${DATA_DIR}/Medicare_Provider_Util_Payment_PUF_CY${MEDICARE_YEAR}.txt
 
 # Microservice 2
 # Runs Detached 
@@ -40,7 +40,7 @@ echo "beginning preprocessing microservice..."
 # Check status every 5 minutes, continue once container is waiting in bash shell
 echo "waiting for preprocessing to finish. You can check the container's activities with sudo docker logs --follow hadoop1-master"
 while : ; do
-        STATUS=`sudo docker exec hadoop1-master bash -c "ps -NT | tail -1"`
+        STATUS=`docker exec hadoop1-master bash -c "ps -NT | tail -1"`
         STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
 
         #Done once we return to the shell
@@ -52,7 +52,7 @@ done
 echo "preprocessing microservice finished"
 
 #Move files to Linux Kernel Filesystem
-sudo docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
+docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
 
 # Microservice 3
 # Runs Detached
@@ -79,7 +79,7 @@ echo "beginning analytics microservice..."
 # Check status every minute, continue once container is waiting in bash shell
 echo "waiting for analytics to finish. You can check the container's activities with sudo docker logs --follow hadoop2-master"
 while : ; do
-        STATUS=`sudo docker exec hadoop2-master bash -c "ps -NT | tail -1"`
+        STATUS=`docker exec hadoop2-master bash -c "ps -NT | tail -1"`
         STATUS=`echo "$STATUS" | awk '{ print \$NF }'`
 
         #Done once we return to the shell
