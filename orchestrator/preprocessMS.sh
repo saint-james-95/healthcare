@@ -55,4 +55,4 @@ docker run -itd \
                 --hostname ${CLUSTER}-master \
                 -e "PCT=${PCT}" \
                 -v ${DATA_DIR}:/big/medicare-demo/ref_data \
-  	            nbdif/healthcare:app_preprocess
+                nbdif/healthcare:app_preprocess
