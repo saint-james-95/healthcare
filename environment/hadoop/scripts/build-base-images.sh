@@ -1,8 +1,8 @@
-cd ../image-building
+cd $HOME/Use-Case-Healthcare/environment/hadoop/dockerfiles
 
 #Base image, shared by slave and master
-cd base
-sudo docker build -t environment:base .
+cd base-slave
+sudo docker build -t environment:base-slave .
 
 #Extra programs for the master
 cd ..
