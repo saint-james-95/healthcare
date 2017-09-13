@@ -1,4 +1,4 @@
-FROM nbdif/healthcare:hadoop_base_slave
+FROM nbdif/healthcare:hadoop_slave_base
 
 WORKDIR /root
 
