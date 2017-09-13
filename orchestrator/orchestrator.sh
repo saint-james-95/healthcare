@@ -53,7 +53,7 @@ echo "preprocessing microservice finished"
 
 #Move files to Linux Kernel Filesystem
 docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && hadoop fs -get medicare_\$PCT"
-docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && "
+docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && chown -R --reference=. ./*"
 # Microservice 3
 # Runs Detached
 # Input - Cluster Number (to have more than one cluster)
