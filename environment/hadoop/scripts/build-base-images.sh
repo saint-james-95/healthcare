@@ -13,4 +13,4 @@ cd ..
 cd base-master
 sudo docker build -t environment:base-master .
 
-cd $PWD
+cd $THIS_DIR
