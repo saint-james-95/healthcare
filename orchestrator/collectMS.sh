@@ -11,8 +11,8 @@ if [ "$MEDICARE_YEAR" = 2012 ]; then
 fi
 
 # Stop and delete if container already exists
-sudo docker stop $CONTAINER_NAME &> /dev/null
-sudo docker rm $CONTAINER_NAME &> /dev/null
+docker stop $CONTAINER_NAME &> /dev/null
+docker rm $CONTAINER_NAME &> /dev/null
 
 # Choose datasets to collect
 NPI=true
@@ -20,7 +20,7 @@ NUCC=true
 MEDICARE=true
 
 # Run Microservice
-sudo docker run -it \
+docker run -it \
 		--name $CONTAINER_NAME \
 		-e "NPI=$NPI" \
 		-e "NUCC=$NUCC" \
