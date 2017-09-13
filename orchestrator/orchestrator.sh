@@ -88,4 +88,5 @@ while : ; do
         fi
         sleep 60
 done
+docker exec -ti hadoop2-master sh -c "cd /big/medicare-demo/ref_data && chown -R --reference=. ./*"
 echo "analytics microservice finished"
