@@ -3,5 +3,5 @@ WORKDIR /root
 RUN mkdir output
 COPY . /root
 ENTRYPOINT ["/bin/sh"]
-CMD ["-c", "cd /root/output && /root/collect.sh; exit"]
+CMD ["-c", "cd /root/output && /root/collect.sh && chown -R --reference=. ./*; exit"]
 
