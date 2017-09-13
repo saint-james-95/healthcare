@@ -7,11 +7,11 @@ cd $HOME/Use-Case-Healthcare/environment/hadoop/dockerfiles
 
 #Configured Slave Image
 cd slave
-sudo docker build -t environment:slave$1 .
+docker build -t environment:slave$1 .
 
 #Configured Master Image 
 cd ..
 cd master
-sudo docker build -t environment:master$1 .
+docker build -t environment:master$1 .
 
 cd $THIS_DIR
