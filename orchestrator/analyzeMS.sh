@@ -24,8 +24,8 @@ CMD=$6
 
 # Stop current instance of this cluster and network if exists
 echo "Stopping and removing all containers containing string '${CLUSTER}' in container name..."
-docker stop $(sudo docker ps -a -f "name=${CLUSTER}" | tail -n +2 | awk '{print $NF}') &> /dev/null
-docker rm $(sudo docker ps -a -f "name=${CLUSTER}" | tail -n +2 | awk '{print $NF}') &> /dev/null
+docker stop $(docker ps -a -f "name=${CLUSTER}" | tail -n +2 | awk '{print $NF}') &> /dev/null
+docker rm $(docker ps -a -f "name=${CLUSTER}" | tail -n +2 | awk '{print $NF}') &> /dev/null
 
 echo "Removing ${CLUSTER} network if it exists..."
 docker network rm ${CLUSTER} &> /dev/null
@@ -40,16 +40,18 @@ while [ $i -le $NUM_SLAVES ]
 do
         echo "Starting hadoop-slave$i container..."
         docker run -itd \
+			--privileged=true \
                         --net=${CLUSTER} \
                         --name ${CLUSTER}-slave$i \
                         --hostname ${CLUSTER}-slave$i \
-                        nbdif/healthcare:env_slave2
+                        nbdif/healthcare:slave2
         i=$(( $i + 1 ))
 done
 
 # Starting Hadoop Master 
 echo "Starting hadoop-master container..."
 eval docker run -itd \
+		--privileged=true \
                 --net=${CLUSTER} \
                 -p 5007${1}:50070 \
                 -p 808${1}:8088 \

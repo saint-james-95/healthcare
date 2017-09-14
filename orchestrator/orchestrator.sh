@@ -3,7 +3,9 @@ PCT=10
 DATA_DIR="${HOME}/Use-Case-Healthcare/data"
 RESULTS_DIR="${HOME}/Use-Case-Healthcare/output"
 RESULTS_FILE="${RESULTS_DIR}/results_${MEDICARE_YEAR}_${PCT}.txt"
+
 mkdir -p $RESULTS_DIR
+mkdir -p $DATA_DIR
 touch $RESULTS_FILE
 
 # Microservice 1
@@ -68,7 +70,7 @@ docker exec -ti hadoop1-master sh -c "cd /big/medicare-demo/ref_data && chown -R
 # Once finished - Nothing to do
 
 # Overwrite Default Command
-ANALYZE_CMD="\"-c\" \"service ssh start && ./start-hadoop.sh && cd /big/medicare-demo/ref_data && hadoop fs -put medicare_\\\$PCT && cd /big/medicare-demo && ./run2.sh \\\$PCT >> /big/medicare-demo/output.txt; bash\""
+ANALYZE_CMD="\"-c\" \"service ssh start && ./start-hadoop.sh && cd /big/medicare-demo/ref_data && hadoop fs -put medicare_\\\$PCT && cd /big/medicare-demo && chmod +x run2.sh && ./run2.sh \\\$PCT >> /big/medicare-demo/output.txt; bash\""
 
 
 ANALYZE_CLUSTER_ID=2
