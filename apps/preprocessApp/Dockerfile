@@ -1,4 +1,4 @@
-FROM nbdif/healthcare:env_master1
+FROM nbdif/healthcare:master1
 WORKDIR /root
 COPY . /big/medicare-demo
 ENTRYPOINT ["/bin/sh"]
