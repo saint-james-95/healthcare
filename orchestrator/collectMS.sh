@@ -15,9 +15,9 @@ docker stop $CONTAINER_NAME &> /dev/null
 docker rm $CONTAINER_NAME &> /dev/null
 
 # Choose datasets to collect
-NPI=false
-NUCC=false
-MEDICARE=false
+NPI=true
+NUCC=true
+MEDICARE=true
 
 # Run Microservice
 docker run -it \
